@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static software.amazon.awssdk.enhanced.dynamodb.internal.AttributeValues.binaryValue;
 import static software.amazon.awssdk.enhanced.dynamodb.internal.AttributeValues.nullAttributeValue;
@@ -196,13 +197,15 @@ public class BeanTableSchemaTest {
 
         bean.setInnerBean1(new AbstractBean());
         bean.setInnerBean2(new AbstractBean());
+        bean.setInnerBeans(Arrays.asList(new AbstractBean()));
 
         Map<String, AttributeValue> itemMap = beanTableSchema.itemToMap(bean, true);
         AttributeValue expectedMapForInnerBean1 = AttributeValue.builder().m(new HashMap<>()).build();
 
-        assertThat(itemMap.size(), is(2));
+        assertThat(itemMap.size(), is(3));
         assertThat(itemMap, hasEntry("innerBean1", expectedMapForInnerBean1));
         assertThat(itemMap.get("innerBean2").m(), hasEntry("attribute2", nullAttributeValue()));
+        assertThat(itemMap.get("innerBeans").l(), hasItem(expectedMapForInnerBean1));
     }
 
     @Test

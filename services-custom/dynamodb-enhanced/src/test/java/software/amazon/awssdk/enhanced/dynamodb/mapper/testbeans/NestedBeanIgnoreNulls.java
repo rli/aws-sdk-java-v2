@@ -15,6 +15,7 @@
 
 package software.amazon.awssdk.enhanced.dynamodb.mapper.testbeans;
 
+import java.util.List;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbIgnoreNulls;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
@@ -24,6 +25,7 @@ public class NestedBeanIgnoreNulls {
     private String id;
     private AbstractBean innerBean1;
     private AbstractBean innerBean2;
+    private List<AbstractBean> innerBeans;
 
     @DynamoDbPartitionKey
     public String getId() {
@@ -47,4 +49,14 @@ public class NestedBeanIgnoreNulls {
     public void setInnerBean2(AbstractBean innerBean) {
         this.innerBean2 = innerBean;
     }
+
+    @DynamoDbIgnoreNulls
+    public List<AbstractBean> getInnerBeans() {
+        return innerBeans;
+    }
+
+    public void setInnerBeans(List<AbstractBean> innerBeans) {
+        this.innerBeans = innerBeans;
+    }
+
 }

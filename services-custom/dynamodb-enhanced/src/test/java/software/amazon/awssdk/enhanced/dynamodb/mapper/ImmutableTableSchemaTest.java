@@ -18,6 +18,7 @@ package software.amazon.awssdk.enhanced.dynamodb.mapper;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static software.amazon.awssdk.enhanced.dynamodb.internal.AttributeValues.nullAttributeValue;
 import static software.amazon.awssdk.enhanced.dynamodb.internal.AttributeValues.stringValue;
@@ -272,13 +273,15 @@ public class ImmutableTableSchemaTest {
             NestedImmutableIgnoreNulls.builder()
                                       .innerBean1(AbstractImmutable.builder().build())
                                       .innerBean2(AbstractImmutable.builder().build())
+                                      .innerBeans(Arrays.asList(AbstractImmutable.builder().build()))
                                       .build();
 
         Map<String, AttributeValue> itemMap = tableSchema.itemToMap(nestedImmutable, true);
-        assertThat(itemMap.size(), is(2));
+        assertThat(itemMap.size(), is(3));
         AttributeValue expectedMapForInnerBean1 = AttributeValue.builder().m(new HashMap<>()).build();
 
         assertThat(itemMap, hasEntry("innerBean1", expectedMapForInnerBean1));
         assertThat(itemMap.get("innerBean2").m(), hasEntry("attribute2", nullAttributeValue()));
+        assertThat(itemMap.get("innerBeans").l(), hasItem(expectedMapForInnerBean1));
     }
 }

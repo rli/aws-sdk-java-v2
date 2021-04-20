@@ -15,6 +15,7 @@
 
 package software.amazon.awssdk.enhanced.dynamodb.mapper.testbeans;
 
+import java.util.List;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbIgnoreNulls;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbImmutable;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
@@ -24,11 +25,13 @@ public class NestedImmutableIgnoreNulls {
     private final String id;
     private final AbstractImmutable innerBean1;
     private final AbstractImmutable innerBean2;
+    private final List<AbstractImmutable> innerBeans;
 
     private NestedImmutableIgnoreNulls(Builder b) {
         this.id = b.id;
         this.innerBean1 = b.innerBean1;
         this.innerBean2 = b.innerBean2;
+        this.innerBeans = b.innerBeans;
     }
 
     @DynamoDbPartitionKey
@@ -43,6 +46,11 @@ public class NestedImmutableIgnoreNulls {
 
     public AbstractImmutable innerBean2() {
         return innerBean2;
+    }
+
+    @DynamoDbIgnoreNulls
+    public List<AbstractImmutable> innerBeans() {
+        return innerBeans;
     }
 
     public static Builder builder() {
@@ -63,17 +71,21 @@ public class NestedImmutableIgnoreNulls {
         if (id != null ? !id.equals(that.id) : that.id != null) {
             return false;
         }
+        if (innerBean1 != null ? !innerBean1.equals(that.innerBean1) : that.innerBean1 != null) {
+            return false;
+        }
         if (innerBean2 != null ? !innerBean2.equals(that.innerBean2) : that.innerBean2 != null) {
             return false;
         }
-        return innerBean1 != null ? innerBean1.equals(that.innerBean1) : that.innerBean1 == null;
+        return innerBeans != null ? innerBeans.equals(that.innerBeans) : that.innerBeans == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (innerBean2 != null ? innerBean2.hashCode() : 0);
         result = 31 * result + (innerBean1 != null ? innerBean1.hashCode() : 0);
+        result = 31 * result + (innerBean2 != null ? innerBean2.hashCode() : 0);
+        result = 31 * result + (innerBeans != null ? innerBeans.hashCode() : 0);
         return result;
     }
 
@@ -81,6 +93,7 @@ public class NestedImmutableIgnoreNulls {
         private AbstractImmutable innerBean1;
         private String id;
         private AbstractImmutable innerBean2;
+        private List<AbstractImmutable> innerBeans;
 
         private Builder() {
         }
@@ -97,6 +110,11 @@ public class NestedImmutableIgnoreNulls {
 
         public Builder innerBean2(AbstractImmutable innerBean2) {
             this.innerBean2 = innerBean2;
+            return this;
+        }
+
+        public Builder innerBeans(List<AbstractImmutable> innerBeans) {
+            this.innerBeans = innerBeans;
             return this;
         }
 
