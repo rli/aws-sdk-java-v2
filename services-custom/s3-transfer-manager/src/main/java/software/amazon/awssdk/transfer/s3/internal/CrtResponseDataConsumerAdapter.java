@@ -82,9 +82,7 @@ public class CrtResponseDataConsumerAdapter<ReturnT> implements ResponseDataCons
     public void onResponseData(ByteBuffer byteBuffer) {
         log.trace(() -> "Received data of size " + byteBuffer.remaining());
 
-        // Need to make a copy because the incoming byteBuffer might get released soon
-        ByteBuffer newByteBuffer = ByteBuffer.wrap(BinaryUtils.copyAllBytesFrom(byteBuffer));
-        publisher.deliverData(newByteBuffer);
+        publisher.deliverData(byteBuffer);
     }
 
     @Override
